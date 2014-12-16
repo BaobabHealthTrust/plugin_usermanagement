@@ -41,7 +41,9 @@ class CoreUserManagementController < ApplicationController
     session[:token] = u.property_value
     session[:user_id] = u.user_id
 
-    redirect_to "/core_user_management/location?user_id=#{user.id}&src=#{params[:src]}&token=#{session[:token]}" and return
+    redirect_to "/" and return
+
+    # redirect_to "/core_user_management/location?user_id=#{user.id}&src=#{params[:src]}&token=#{session[:token]}" and return
 
   end
 
@@ -332,6 +334,20 @@ class CoreUserManagementController < ApplicationController
       flash[:error] = "Invalid location"
 
       redirect_to "/core_user_management/location?user_id=#{session[:user_id]}&src=#{params[:src]}&token=#{session[:token]}" and return
+
+    end
+
+    CoreLocation.current_location = @location # rescue nil
+
+    if !(Core::Location rescue nil).nil?
+
+      Core::Location.current_location = @location # rescue nil
+
+    end
+
+    if !(Location rescue nil).nil?
+
+      Location.current_location = @location # rescue nil
 
     end
 

@@ -214,13 +214,15 @@ class CoreUser < ActiveRecord::Base
   end
 
   def demographics
-    {
-      :user_id => self.id,
-      :name => self.name,
-      :token => (self.user_properties.find_by_property("Token").property_value rescue nil),
-      :roles => (self.user_roles.collect{|r| r.role} rescue []),
-      :status => self.status_value
-    }
+    result = HashWithIndifferentAccess.new
+
+    result[:user_id] = self.id
+    result[:name] = self.name
+    result[:token] = (self.user_properties.find_by_property("Token").property_value rescue nil)
+    result[:roles] = (self.user_roles.collect{|r| r.role} rescue [])
+    result[:status] = self.status_value
+
+    result
   end
 
 end
